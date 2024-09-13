@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const NewsPage = () => {
-    const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
       const API_KEY =
         "https://newsapi.org/v2/everything?q=apple&from=2024-09-12&to=2024-09-12&sortBy=popularity&apiKey=1c3be56384c54a74bf31ff0d089ab7bc"; 
@@ -9,13 +10,20 @@ const NewsPage = () => {
   
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(API_KEY)
-      
+      setIsLoading(true);
+      try {
+        const result = await fetch(API_KEY)
 
       result.json()
         .then(json => {
           console.log(json);
+          setRecords(json.articles);
         })
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -37,22 +45,28 @@ const NewsPage = () => {
       </div>
 
       {/* News List */}
-      <div className="grid gap-6 max-w-4xl mx-auto">
-        {/* Example of a news item */}
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">
-              {records}
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Краткое описание новости. Здесь будет текст, который дает
-              представление о содержании статьи.
-            </p>
-            <a href="#" className="text-blue-500 hover:underline">
-              Read more
-            </a>
-          </div>
-      </div>
+      {
+        isLoading ? <div className="flex justify-center items-center">Loading</div> :
+      
+          <div className="grid gap-6 max-w-4xl mx-auto">
+            {/* Example of a news item */}
+            {records.map((record) => {
+              return (
+                <div key={record.id} className="bg-white p-4 rounded-lg shadow-md">
+                  <h2 className="text-xl font-semibold mb-2">
+                    {record.title}
+                  </h2>
+                  <p className="text-gray-600 mb-4">
+                    {record.description}
+                  </p>
+                  <a href={record.url} target="_blank" className="text-blue-500 hover:underline">
+                    Read more
+                  </a>
+                </div>
+              );
+            })};
 
+          </div>}
       {/* Footer */}
       <footer className="bg-white shadow-md py-4 mt-12">
         <p className="text-center text-gray-500">
