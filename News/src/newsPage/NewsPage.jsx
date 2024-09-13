@@ -1,6 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const NewsPage = () => {
+    const [records, setRecords] = useState([]);
+
+      const API_KEY =
+        "https://newsapi.org/v2/everything?q=apple&from=2024-09-12&to=2024-09-12&sortBy=popularity&apiKey=1c3be56384c54a74bf31ff0d089ab7bc"; 
+      
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch(API_KEY)
+      
+
+      result.json()
+        .then(json => {
+          console.log(json);
+        })
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       {/* Header */}
@@ -22,7 +41,7 @@ const NewsPage = () => {
         {/* Example of a news item */}
           <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">
-              Заголовок новости
+              {records}
             </h2>
             <p className="text-gray-600 mb-4">
               Краткое описание новости. Здесь будет текст, который дает
