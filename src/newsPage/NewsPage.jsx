@@ -9,21 +9,27 @@ const NewsPage = () => {
 
   const fetchNews = async (query) => {
     setIsLoading(true);
-
     const url = query
       ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
       : `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
-
+  
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setRecords(data.articles);
+  
+      if (data.articles && data.articles.length > 0) {
+        setRecords(data.articles);
+      } else {
+        setRecords([]); 
+      }
     } catch (error) {
-      console.error('Ошибка при получении новостей:', error);
+      console.error(error);
+      setRecords([]); 
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (inputValue.trim()) {
