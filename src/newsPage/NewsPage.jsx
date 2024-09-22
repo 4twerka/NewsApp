@@ -10,8 +10,9 @@ const NewsPage = () => {
   const fetchNews = async (query) => {
     setIsLoading(true);
     const url = query
-      ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
-      : `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
+  ? `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
+  : `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
+
   
     try {
       const response = await fetch(url);
